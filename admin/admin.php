@@ -276,8 +276,7 @@ function vt_dashboard_page() {
                             ?>
                                 <span class="vt-badge vt-badge-tag vt-tag-editable"
                                       data-tag="<?php echo esc_attr( $s->tag ); ?>"
-                                      data-desc="<?php echo esc_attr( $tag_desc ); ?>"
-                                      title="<?php echo esc_attr( $tag_desc ?: 'Click to add a description' ); ?>">
+                                      data-desc="<?php echo esc_attr( $tag_desc ); ?>">
                                     <?php echo esc_html( $s->tag ); ?>
                                 </span>
                             <?php else : echo '—'; endif; ?>

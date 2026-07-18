@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.6.0 */
+/* Visitor Trails — Admin Styles v2.6.1 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -156,7 +156,38 @@
     white-space: nowrap;
 }
 .vt-badge-tag { background: var(--vt-tag-bg); color: var(--vt-tag-text); }
-.vt-tag-editable { cursor: pointer; }
+.vt-tag-editable { cursor: pointer; position: relative; }
+.vt-tag-editable[data-desc=""] { border-bottom: 1px dashed currentColor; }
+
+/* Custom tooltip — instant, no native title-attribute delay/styling.
+   Only renders when data-desc is non-empty. */
+.vt-tag-editable[data-desc]:not([data-desc=""])::after {
+    content: attr(data-desc);
+    position: absolute;
+    bottom: calc(100% + 7px);
+    left: 50%;
+    transform: translateX(-50%) translateY(3px);
+    background: #1f2937;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+    padding: 5px 9px;
+    border-radius: 6px;
+    white-space: normal;
+    width: max-content;
+    max-width: 220px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .1s ease, transform .1s ease;
+    z-index: 50;
+}
+.vt-tag-editable[data-desc]:not([data-desc=""]):hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 .vt-tag-desc-input {
     font-size: 11px;
     padding: 2px 7px;

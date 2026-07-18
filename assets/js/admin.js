@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin JS v2.6.0 */
+/* Visitor Trails — Admin JS v2.6.1 */
 jQuery(function ($) {
 
     // ── Trail expand / collapse ───────────────────────────────────────────────
@@ -102,9 +102,7 @@ jQuery(function ($) {
             }).done(function (res) {
                 if (!res.success) return;
                 var saved = res.data.description;
-                $('.vt-tag-editable[data-tag="' + tag + '"]')
-                    .attr('data-desc', saved)
-                    .attr('title', saved || 'Click to add a description');
+                $('.vt-tag-editable[data-tag="' + tag + '"]').attr('data-desc', saved);
             });
         }
 
