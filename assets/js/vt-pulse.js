@@ -28,16 +28,23 @@
     'text-', 'bg-', 'px-', 'py-', 'pt-', 'pb-', 'pl-', 'pr-',
     'mx-', 'my-', 'mt-', 'mb-', 'ml-', 'mr-', 'p-', 'm-',
     'w-', 'h-', 'min-', 'max-', 'flex-', 'grid-', 'gap-', 'col-', 'row-',
-    'border-', 'rounded-', 'shadow-', 'font-', 'leading-', 'tracking-',
+    'border-', 'rounded-', 'shadow-', 'font-', 'leading-',
     'opacity-', 'z-', 'top-', 'left-', 'right-', 'bottom-',
     'hover:', 'focus:', 'active:', 'sm:', 'md:', 'lg:', 'xl:', '2xl:', 'dark:',
     'group-', 'peer-', 'transition-', 'duration-', 'ease-', 'animate-',
+    'items-', 'justify-', 'whitespace-',
   ];
 
+  // Exact-match rather than prefix — 'tracking-' as a prefix would also eat
+  // custom tracking labels like "tracking-hero-cta" that just happen to
+  // share Tailwind's letter-spacing prefix, so only the real Tailwind
+  // values are skipped here.
   var SKIP_EXACT = [
     'active','open','show','hide','visible','hidden','disabled','current',
     'selected','is-active','is-open','flex','block','inline','grid',
     'relative','absolute','sticky','fixed','sr-only','clearfix',
+    'tracking-tighter','tracking-tight','tracking-normal',
+    'tracking-wide','tracking-wider','tracking-widest',
   ];
 
   function filterClasses(raw) {
