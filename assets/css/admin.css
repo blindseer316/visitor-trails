@@ -1,0 +1,314 @@
+/* Visitor Trails — Admin Styles v2.5.0 */
+
+:root {
+    --vt-brand:      #2271b1;
+    --vt-brand-dk:   #135e96;
+    --vt-bg:         #f0f6fc;
+    --vt-border:     #c3c4c7;
+    --vt-tag-bg:     #d1fae5;
+    --vt-tag-text:   #065f46;
+    --vt-utm-bg:     #dbeafe;
+    --vt-utm-text:   #1e40af;
+    --vt-section-bg:   #ede9fe;
+    --vt-section-text: #5b21b6;
+    --vt-row-alt:    #f9fafb;
+    --vt-trail-bg:   #f0f6fc;
+    --vt-click-bg:   #fff7ed;
+    --vt-click-text: #92400e;
+    --vt-conv:       #fef9c3;
+    --vt-bot-tier1:  #ef4444;
+    --vt-bot-tier2:  #f97316;
+    --vt-bot-tier3:  #f59e0b;
+}
+
+.vt-wrap { max-width: 1500px; }
+
+/* Heading */
+.vt-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 22px !important;
+    margin-bottom: 20px !important;
+}
+.vt-heading .dashicons { color: var(--vt-brand); font-size: 24px; }
+.vt-version {
+    font-size: 11px;
+    color: #9ca3af;
+    font-weight: 400;
+    margin-left: 4px;
+    align-self: flex-end;
+    padding-bottom: 2px;
+}
+
+/* Stats strip */
+.vt-stats-strip {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.vt-stat {
+    background: #fff;
+    border: 1px solid var(--vt-border);
+    border-radius: 8px;
+    padding: 14px 22px;
+    min-width: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.vt-stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--vt-brand);
+    line-height: 1.2;
+    word-break: break-all;
+    text-align: center;
+}
+.vt-stat-label {
+    font-size: 10px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-top: 4px;
+    text-align: center;
+}
+
+/* Filters */
+.vt-filters { margin-bottom: 10px; }
+.vt-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+.vt-search-input { min-width: 220px; padding: 5px 10px !important; }
+.vt-filter-row select,
+.vt-filter-row input[type="date"] {
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid var(--vt-border);
+    padding: 0 8px;
+    font-size: 13px;
+}
+.vt-filter-row select {
+    /* WP core's native select already draws its own arrow via a background
+       image. The padding above needs extra room on the right for it, but
+       DO NOT set `appearance` here — forcing it back to `auto` makes the
+       browser draw its OWN native arrow on top of WP's, producing a
+       double chevron. Leave appearance alone; only fix the padding. */
+    padding: 0 28px 0 10px;
+}
+
+/* Toolbar */
+.vt-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.vt-count { color: #6b7280; font-size: 13px; }
+.vt-toolbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* Table */
+.vt-table-wrap { overflow-x: auto; }
+.vt-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.vt-table thead th {
+    background: var(--vt-bg);
+    color: #374151;
+    font-weight: 600;
+    padding: 9px 10px;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--vt-border);
+}
+.vt-session-row:nth-child(4n+1) { background: var(--vt-row-alt); }
+.vt-session-row.vt-converted { background: var(--vt-conv) !important; }
+.vt-session-row:hover > td { background: #eff6ff; }
+.vt-table tbody td {
+    padding: 8px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.vt-td-date { white-space: nowrap; }
+.vt-date { display: block; font-weight: 500; }
+.vt-time { display: block; font-size: 11px; color: #9ca3af; }
+.vt-mono { font-family: monospace; font-size: 12px; }
+.vt-center { text-align: center; }
+.vt-entry-page {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+.vt-flag { font-size: 15px; vertical-align: middle; margin-right: 3px; }
+
+/* Badges */
+.vt-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.vt-badge-tag { background: var(--vt-tag-bg); color: var(--vt-tag-text); }
+.vt-badge-utm { background: var(--vt-utm-bg); color: var(--vt-utm-text); }
+.vt-badge-section { background: var(--vt-section-bg); color: var(--vt-section-text); margin-left: 4px; }
+.vt-badge-returning {
+    background: #ede9fe;
+    color: #6d28d9;
+    padding: 1px 5px;
+    font-size: 10px;
+    margin-right: 4px;
+    cursor: help;
+}
+
+/* Bot tier indicator — small colored dot with a native tooltip (title attr),
+   deliberately subtle rather than an eye-catching icon/badge */
+.vt-bot-dot {
+    display: inline-block;
+    font-size: 9px;
+    line-height: 1;
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+}
+.vt-bot-tier-1 { color: var(--vt-bot-tier1); }
+.vt-bot-tier-2 { color: var(--vt-bot-tier2); }
+.vt-bot-tier-3 { color: var(--vt-bot-tier3); }
+
+/* Click count badge */
+.vt-click-count {
+    display: inline-block;
+    background: var(--vt-click-bg);
+    color: var(--vt-click-text);
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Conversion star */
+.vt-conv-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #d1d5db;
+    padding: 0;
+    line-height: 1;
+    transition: color .15s;
+}
+.vt-conv-btn:hover,
+.vt-conv-btn.vt-conv-yes { color: #f59e0b; }
+
+/* Trail toggle */
+.vt-trail-toggle { font-size: 11px !important; padding: 2px 8px !important; cursor: pointer; }
+
+/* Trail expand */
+.vt-trail-row > td { padding: 0 !important; border-bottom: 2px solid var(--vt-brand) !important; }
+.vt-trail-inner {
+    background: var(--vt-trail-bg);
+    border-left: 3px solid var(--vt-brand);
+    padding: 14px 18px;
+}
+
+/* Trail list */
+.vt-trail-list { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.vt-trail-item { display: flex; flex-direction: column; gap: 4px; }
+
+.vt-trail-page {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+.vt-trail-num {
+    background: var(--vt-brand);
+    color: #fff;
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.vt-trail-path  { font-family: monospace; font-size: 12px; font-weight: 600; }
+.vt-trail-title { color: #6b7280; font-size: 12px; }
+.vt-trail-time  { color: #9ca3af; font-size: 11px; margin-left: auto; }
+.vt-trail-duration { color: #9ca3af; font-size: 11px; }
+
+/* Click events under each pageview */
+.vt-click-list {
+    list-style: none;
+    margin: 2px 0 0 28px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.vt-click-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #374151;
+    background: var(--vt-click-bg);
+    border-radius: 4px;
+    padding: 3px 8px;
+}
+.vt-click-icon  { color: var(--vt-brand); font-weight: 700; cursor: help; }
+.vt-click-label { font-weight: 500; }
+.vt-click-href  {
+    color: var(--vt-brand);
+    font-size: 11px;
+    font-family: monospace;
+    text-decoration: none;
+}
+.vt-click-href:hover { text-decoration: underline; }
+.vt-click-tech {
+    display: none;
+    color: #9ca3af;
+    font-size: 10px;
+    font-family: monospace;
+    background: #f3f4f6;
+    border-radius: 3px;
+    padding: 1px 5px;
+}
+.vt-wrap.vt-show-tech .vt-click-tech { display: inline-block; }
+.vt-click-time  { color: #9ca3af; font-size: 11px; margin-left: auto; flex-shrink: 0; }
+
+/* Session meta */
+.vt-session-meta {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.vt-meta-row { font-size: 12px; color: #374151; }
+
+/* Empty */
+.vt-empty { color: #9ca3af; font-style: italic; padding: 20px !important; text-align: center; }
+
+/* Pagination */
+.vt-pagination { margin-top: 14px; display: flex; gap: 5px; flex-wrap: wrap; }
+.vt-page-btn {
+    display: inline-block;
+    padding: 4px 11px;
+    border: 1px solid var(--vt-border);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--vt-brand);
+    text-decoration: none;
+    font-size: 13px;
+}
+.vt-page-btn:hover { background: var(--vt-bg); }
+.vt-page-active { background: var(--vt-brand) !important; color: #fff !important; border-color: var(--vt-brand-dk) !important; }
