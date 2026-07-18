@@ -130,6 +130,7 @@ function vt_dashboard_page() {
 
     $total_pages = ceil( $total / VT_PER_PAGE );
     $anonymize   = get_option( 'vt_anonymize_ip', '0' );
+    $tag_descriptions = get_option( 'vt_tag_descriptions', [] );
     ?>
     <div class="wrap vt-wrap">
 
@@ -269,7 +270,18 @@ function vt_dashboard_page() {
                                 <?php echo esc_html( $s->city ? $s->city . ', ' . $s->country_code : $s->country_code ); ?>
                             <?php else : echo '—'; endif; ?>
                         </td>
-                        <td><?php echo $s->tag ? '<span class="vt-badge vt-badge-tag">' . esc_html( $s->tag ) . '</span>' : '—'; ?></td>
+                        <td>
+                            <?php if ( $s->tag ) :
+                                $tag_desc = $tag_descriptions[ $s->tag ] ?? '';
+                            ?>
+                                <span class="vt-badge vt-badge-tag vt-tag-editable"
+                                      data-tag="<?php echo esc_attr( $s->tag ); ?>"
+                                      data-desc="<?php echo esc_attr( $tag_desc ); ?>"
+                                      title="<?php echo esc_attr( $tag_desc ?: 'Click to add a description' ); ?>">
+                                    <?php echo esc_html( $s->tag ); ?>
+                                </span>
+                            <?php else : echo '—'; endif; ?>
+                        </td>
                         <td><?php echo $s->utm_source ? '<span class="vt-badge vt-badge-utm">' . esc_html( $s->utm_source ) . '</span>' : '—'; ?></td>
                         <td><?php echo $s->utm_campaign ? esc_html( $s->utm_campaign ) : '—'; ?></td>
                         <td title="<?php echo esc_attr( $s->referrer ); ?>"><?php echo $ref_domain ? esc_html( $ref_domain ) : '—'; ?></td>

@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin JS v2.4.0 */
+/* Visitor Trails — Admin JS v2.6.0 */
 jQuery(function ($) {
 
     // ── Trail expand / collapse ───────────────────────────────────────────────
@@ -57,6 +57,62 @@ jQuery(function ($) {
 
     $(document).on('click', '#vt-toggle-tech', function () {
         setTechState(!$('.vt-wrap').hasClass('vt-show-tech'));
+    });
+
+    // ── Tag description inline edit ───────────────────────────────────────────
+    // Click a tag badge to attach/edit a freeform note (e.g. what "fbgrpreal"
+    // actually refers to), shown as its tooltip afterward. Saves on blur/Enter,
+    // Escape cancels. All badges sharing the same tag update together since
+    // the description belongs to the tag string, not any one session row.
+
+    $(document).on('click', '.vt-tag-editable', function () {
+        var $badge = $(this);
+        if ($badge.data('editing')) return;
+        $badge.data('editing', true);
+
+        var tag  = $badge.data('tag');
+        var desc = $badge.attr('data-desc') || '';
+
+        var $input = $('<input>', {
+            type:        'text',
+            class:       'vt-tag-desc-input',
+            val:         desc,
+            placeholder: 'Add a description…',
+            maxlength:   255,
+        });
+
+        $badge.hide().after($input);
+        $input.trigger('focus').select();
+
+        function cleanup() {
+            $input.remove();
+            $badge.show().data('editing', false);
+        }
+
+        function save() {
+            var newDesc = $input.val();
+            cleanup();
+            if (newDesc === desc) return;
+
+            $.post(VT_Admin.ajaxurl, {
+                action:      'vt_save_tag_desc',
+                nonce:       VT_Admin.nonce,
+                tag:         tag,
+                description: newDesc,
+            }).done(function (res) {
+                if (!res.success) return;
+                var saved = res.data.description;
+                $('.vt-tag-editable[data-tag="' + tag + '"]')
+                    .attr('data-desc', saved)
+                    .attr('title', saved || 'Click to add a description');
+            });
+        }
+
+        $input.on('blur', save);
+        $input.on('keydown', function (e) {
+            if (e.key === 'Enter')  { e.preventDefault(); $input.trigger('blur'); }
+            if (e.key === 'Escape') { $input.off('blur'); cleanup(); }
+        });
     });
 
 });

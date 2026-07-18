@@ -10,6 +10,7 @@ add_action( 'wp_ajax_nopriv_vt_event',    'vt_ajax_event' );
 add_action( 'wp_ajax_vt_duration',        'vt_ajax_duration' );
 add_action( 'wp_ajax_nopriv_vt_duration', 'vt_ajax_duration' );
 add_action( 'wp_ajax_vt_convert',         'vt_ajax_convert' );
+add_action( 'wp_ajax_vt_save_tag_desc',   'vt_ajax_save_tag_desc' );
 
 // ── Pageview ──────────────────────────────────────────────────────────────────
 
@@ -266,4 +267,31 @@ function vt_ajax_convert() {
 
     $wpdb->update( $st, [ 'is_converted' => $new ], [ 'id' => $session_id ] );
     wp_send_json_success( [ 'converted' => $new ] );
+}
+
+// ── Tag descriptions (admin only) ─────────────────────────────────────────────
+// Freeform notes attached to a tag string (e.g. "fbgrpreal" -> "the Real
+// Estate Investors FB group"), so ad-hoc tags stay meaningful months later.
+// Stored as a single option (tag => description) rather than a DB column,
+// since a tag isn't a row of its own — it's just a string that happens to
+// repeat across sessions.
+
+function vt_ajax_save_tag_desc() {
+    if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
+    check_ajax_referer( 'vt_admin', 'nonce' );
+
+    $tag = sanitize_text_field( wp_unslash( $_POST['tag'] ?? '' ) );
+    if ( ! $tag ) { wp_send_json_error(); }
+
+    $description = substr( sanitize_text_field( wp_unslash( $_POST['description'] ?? '' ) ), 0, 255 );
+
+    $descriptions = get_option( 'vt_tag_descriptions', [] );
+    if ( $description === '' ) {
+        unset( $descriptions[ $tag ] );
+    } else {
+        $descriptions[ $tag ] = $description;
+    }
+    update_option( 'vt_tag_descriptions', $descriptions );
+
+    wp_send_json_success( [ 'tag' => $tag, 'description' => $description ] );
 }

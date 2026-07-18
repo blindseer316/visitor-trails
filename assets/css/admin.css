@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.5.0 */
+/* Visitor Trails — Admin Styles v2.6.0 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -156,6 +156,15 @@
     white-space: nowrap;
 }
 .vt-badge-tag { background: var(--vt-tag-bg); color: var(--vt-tag-text); }
+.vt-tag-editable { cursor: pointer; }
+.vt-tag-desc-input {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 12px;
+    border: 1px solid var(--vt-brand);
+    min-width: 160px;
+    height: auto;
+}
 .vt-badge-utm { background: var(--vt-utm-bg); color: var(--vt-utm-text); }
 .vt-badge-section { background: var(--vt-section-bg); color: var(--vt-section-text); margin-left: 4px; }
 .vt-badge-returning {
