@@ -193,6 +193,14 @@ function vt_ajax_pageview() {
         wp_send_json_error( [ 'msg' => 'pageview_failed' ] );
     }
 
+    // A pageview only gets this far after both the session and pageview
+    // inserts succeeded, so any previously recorded failure is stale now —
+    // clear it rather than leave the Settings page showing an error that
+    // no longer reflects reality.
+    if ( get_option( 'vt_last_db_error' ) ) {
+        delete_option( 'vt_last_db_error' );
+    }
+
     wp_send_json_success( [
         'session_id'  => $session_id,
         'pageview_id' => $pageview_id,

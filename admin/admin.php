@@ -107,6 +107,17 @@ function vt_dashboard_page() {
         ? $wpdb->get_results( $wpdb->prepare( $data_sql, ...array_merge( $params, [ VT_PER_PAGE, $offset ] ) ) )
         : $wpdb->get_results( $wpdb->prepare( $data_sql, VT_PER_PAGE, $offset ) );
 
+    // The count query above is a simple COUNT(*) with no SELECT list, so it
+    // can succeed even when the full SELECT * below fails outright (as
+    // opposed to just returning zero rows) — e.g. a row containing data
+    // that's invalid for its column at read time. Surface that mismatch
+    // rather than let it silently render as "no sessions" when there
+    // clearly are some, per $total.
+    $rows_error = '';
+    if ( $sessions === null && $wpdb->last_error ) {
+        $rows_error = $wpdb->last_error;
+    }
+
     // Stats strip (last 30 days) — respects the bot visibility toggle above.
     // $hidden_tiers is always a small array of ints from server-side
     // settings (1/2/3), never raw user input, so direct interpolation here
@@ -141,6 +152,15 @@ function vt_dashboard_page() {
 
         <?php if ( $rescan_notice ) : ?>
             <div class="notice notice-success is-dismissible"><p><?php echo esc_html( $rescan_notice ); ?></p></div>
+        <?php endif; ?>
+
+        <?php if ( $rows_error ) : ?>
+            <div class="notice notice-error">
+                <p>
+                    <strong>Sessions exist (<?php echo number_format( $total ); ?> match this view) but couldn't be read from the database:</strong>
+                </p>
+                <p><code><?php echo esc_html( $rows_error ); ?></code></p>
+            </div>
         <?php endif; ?>
 
         <!-- Stats strip -->
