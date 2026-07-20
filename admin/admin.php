@@ -426,6 +426,10 @@ function vt_dashboard_page() {
 // ── Settings ──────────────────────────────────────────────────────────────────
 
 function vt_settings_page() {
+    if ( isset( $_GET['vt_clear_db_error'] ) && current_user_can( 'manage_options' ) && check_admin_referer( 'vt_clear_db_error' ) ) {
+        delete_option( 'vt_last_db_error' );
+    }
+
     if ( isset( $_POST['vt_save_settings'] ) && check_admin_referer( 'vt_settings' ) ) {
         update_option( 'vt_anonymize_ip',     isset( $_POST['vt_anonymize_ip'] )     ? '1' : '0' );
         update_option( 'vt_hide_bots_tier1',  isset( $_POST['vt_hide_bots_tier1'] )  ? '1' : '0' );
@@ -442,6 +446,23 @@ function vt_settings_page() {
     ?>
     <div class="wrap vt-wrap">
         <h1>Visitor Trails — Settings <span class="vt-version">v<?php echo VT_VERSION; ?></span></h1>
+
+        <?php $db_error = get_option( 'vt_last_db_error' ); ?>
+        <?php if ( $db_error ) : ?>
+            <div class="notice notice-error">
+                <p>
+                    <strong>Tracking is failing to write to the database.</strong> Last error recorded when a
+                    session or pageview insert failed:
+                </p>
+                <p><code><?php echo esc_html( $db_error ); ?></code></p>
+                <p>
+                    <a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'vt_clear_db_error', '1' ), 'vt_clear_db_error' ) ); ?>" class="button button-secondary">
+                        Dismiss
+                    </a>
+                </p>
+            </div>
+        <?php endif; ?>
+
         <form method="post">
             <?php wp_nonce_field( 'vt_settings' ); ?>
             <table class="form-table">

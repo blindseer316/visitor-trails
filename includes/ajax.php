@@ -127,6 +127,10 @@ function vt_ajax_pageview() {
             'last_seen_at' => $now,
         ] );
 
+        if ( $wpdb->last_error ) {
+            update_option( 'vt_last_db_error', $wpdb->last_error, false );
+        }
+
         $session_id = $wpdb->insert_id;
 
     } else {
@@ -179,6 +183,13 @@ function vt_ajax_pageview() {
     $pageview_id = $wpdb->insert_id;
 
     if ( ! $pageview_id ) {
+        // Surface the raw DB error on the Settings page (admin-only) instead
+        // of in this public, unauthenticated response — so a site where
+        // inserts are silently failing (bad table structure, permissions,
+        // etc) is diagnosable without needing direct DB access.
+        if ( $wpdb->last_error ) {
+            update_option( 'vt_last_db_error', $wpdb->last_error, false );
+        }
         wp_send_json_error( [ 'msg' => 'pageview_failed' ] );
     }
 
