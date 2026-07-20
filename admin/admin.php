@@ -315,7 +315,10 @@ function vt_dashboard_page() {
                                 <?php echo $s->is_converted ? '★' : '☆'; ?>
                             </button>
                         </td>
-                        <td><button class="button button-small vt-trail-toggle" data-id="<?php echo (int) $s->id; ?>">Trail ▾</button></td>
+                        <td class="vt-row-actions">
+                            <button class="button button-small vt-trail-toggle" data-id="<?php echo (int) $s->id; ?>">Trail ▾</button>
+                            <button class="button button-small vt-delete-btn" data-id="<?php echo (int) $s->id; ?>" title="Delete this session and all its pageviews/clicks">🗑</button>
+                        </td>
                     </tr>
 
                     <!-- Trail expand row -->

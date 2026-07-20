@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.6.1 */
+/* Visitor Trails — Admin Styles v2.7.0 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -248,6 +248,9 @@
 
 /* Trail toggle */
 .vt-trail-toggle { font-size: 11px !important; padding: 2px 8px !important; cursor: pointer; }
+.vt-row-actions { white-space: nowrap; }
+.vt-delete-btn { font-size: 11px !important; padding: 2px 6px !important; cursor: pointer; margin-left: 4px; }
+.vt-delete-btn:hover { background: #fee2e2 !important; border-color: #ef4444 !important; }
 
 /* Trail expand */
 .vt-trail-row > td { padding: 0 !important; border-bottom: 2px solid var(--vt-brand) !important; }

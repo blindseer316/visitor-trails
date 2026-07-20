@@ -11,6 +11,7 @@ add_action( 'wp_ajax_vt_duration',        'vt_ajax_duration' );
 add_action( 'wp_ajax_nopriv_vt_duration', 'vt_ajax_duration' );
 add_action( 'wp_ajax_vt_convert',         'vt_ajax_convert' );
 add_action( 'wp_ajax_vt_save_tag_desc',   'vt_ajax_save_tag_desc' );
+add_action( 'wp_ajax_vt_delete_session',  'vt_ajax_delete_session' );
 
 // ── Pageview ──────────────────────────────────────────────────────────────────
 
@@ -286,6 +287,36 @@ function vt_ajax_convert() {
 
     $wpdb->update( $st, [ 'is_converted' => $new ], [ 'id' => $session_id ] );
     wp_send_json_success( [ 'converted' => $new ] );
+}
+
+// ── Delete a single session (admin only) ──────────────────────────────────────
+// Same cascading-delete order as vt_run_purge() in visitor-trails.php
+// (events -> pageviews -> session), just scoped to one session instead of
+// an age-based batch.
+
+function vt_ajax_delete_session() {
+    if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
+    check_ajax_referer( 'vt_admin', 'nonce' );
+
+    $session_id = intval( $_POST['session_id'] ?? 0 );
+    if ( ! $session_id ) { wp_send_json_error(); }
+
+    global $wpdb;
+    $st = $wpdb->prefix . VT_TABLE_SESSIONS;
+    $pt = $wpdb->prefix . VT_TABLE_PAGEVIEWS;
+    $et = $wpdb->prefix . VT_TABLE_EVENTS;
+
+    $pv_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$pt} WHERE session_id = %d", $session_id ) );
+    if ( ! empty( $pv_ids ) ) {
+        $pv_ids_str = implode( ',', array_map( 'intval', $pv_ids ) );
+        $wpdb->query( "DELETE FROM {$et} WHERE pageview_id IN ({$pv_ids_str})" );
+    }
+
+    $wpdb->delete( $pt, [ 'session_id' => $session_id ] );
+    $deleted = $wpdb->delete( $st, [ 'id' => $session_id ] );
+
+    if ( ! $deleted ) { wp_send_json_error(); }
+    wp_send_json_success();
 }
 
 // ── Tag descriptions (admin only) ─────────────────────────────────────────────

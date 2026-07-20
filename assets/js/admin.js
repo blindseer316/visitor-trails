@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin JS v2.6.1 */
+/* Visitor Trails — Admin JS v2.7.0 */
 jQuery(function ($) {
 
     // ── Trail expand / collapse ───────────────────────────────────────────────
@@ -57,6 +57,36 @@ jQuery(function ($) {
 
     $(document).on('click', '#vt-toggle-tech', function () {
         setTechState(!$('.vt-wrap').hasClass('vt-show-tech'));
+    });
+
+    // ── Delete session ─────────────────────────────────────────────────────────
+
+    $(document).on('click', '.vt-delete-btn', function () {
+        var $btn       = $(this);
+        var session_id = $btn.data('id');
+
+        if (!window.confirm('Delete this session and all its pageviews/clicks? This cannot be undone.')) {
+            return;
+        }
+
+        $btn.prop('disabled', true);
+
+        $.post(VT_Admin.ajaxurl, {
+            action:     'vt_delete_session',
+            nonce:      VT_Admin.nonce,
+            session_id: session_id,
+        })
+        .done(function (res) {
+            if (res.success) {
+                $('#vt-trail-' + session_id).remove();
+                $btn.closest('tr.vt-session-row').remove();
+            } else {
+                $btn.prop('disabled', false);
+            }
+        })
+        .fail(function () {
+            $btn.prop('disabled', false);
+        });
     });
 
     // ── Tag description inline edit ───────────────────────────────────────────
