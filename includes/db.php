@@ -98,6 +98,7 @@ function vt_create_tables() {
     // so it self-heals even on installs where the version option already
     // got bumped without the columns actually landing.
     vt_ensure_bot_columns();
+    vt_ensure_pageview_columns();
     vt_ensure_duration_column();
     vt_ensure_element_tag_column();
     vt_ensure_visitor_columns();
@@ -240,6 +241,55 @@ function vt_ensure_visitor_columns() {
     $columns_after = $wpdb->get_col( "DESCRIBE {$st}", 0 );
     if ( in_array( 'visitor_key', $columns_after, true ) && in_array( 'is_returning', $columns_after, true ) ) {
         update_option( 'vt_visitor_columns_ok', '1' );
+    }
+}
+
+/**
+ * Same self-healing pattern, for the pageviews table's original base
+ * columns (page_url, page_title, referrer, viewed_at). These predate every
+ * other vt_ensure_* check, on the assumption dbDelta always gets the base
+ * schema right on first create — but on at least one older install, the
+ * table exists without page_url, causing every pageview insert to fail
+ * with "Unknown column 'page_url'". dbDelta's own ALTER-sync is known to
+ * be unreliable on existing tables (see comment atop vt_create_tables()),
+ * so — same as everywhere else in this file — verify directly and add
+ * whatever's missing rather than trust it happened.
+ */
+function vt_ensure_pageview_columns() {
+    if ( get_option( 'vt_pageview_columns_ok' ) === '1' ) {
+        return;
+    }
+
+    global $wpdb;
+    $pt = $wpdb->prefix . VT_TABLE_PAGEVIEWS;
+
+    if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $pt ) ) !== $pt ) {
+        return;
+    }
+
+    $columns = $wpdb->get_col( "DESCRIBE {$pt}", 0 );
+
+    if ( ! in_array( 'page_url', $columns, true ) ) {
+        $wpdb->query( "ALTER TABLE {$pt} ADD COLUMN page_url VARCHAR(512) NOT NULL DEFAULT '' AFTER session_id" );
+    }
+    if ( ! in_array( 'page_title', $columns, true ) ) {
+        $wpdb->query( "ALTER TABLE {$pt} ADD COLUMN page_title VARCHAR(256) NOT NULL DEFAULT '' AFTER page_url" );
+    }
+    if ( ! in_array( 'referrer', $columns, true ) ) {
+        $wpdb->query( "ALTER TABLE {$pt} ADD COLUMN referrer VARCHAR(512) NOT NULL DEFAULT '' AFTER page_title" );
+    }
+    if ( ! in_array( 'viewed_at', $columns, true ) ) {
+        // NOT NULL with no real default — existing rows (if any) need
+        // *something*; an obviously-fake epoch timestamp is easier to spot
+        // as backfilled than silently defaulting to "now".
+        $wpdb->query( "ALTER TABLE {$pt} ADD COLUMN viewed_at DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' AFTER referrer" );
+        $wpdb->query( "ALTER TABLE {$pt} ADD INDEX viewed_at (viewed_at)" );
+    }
+
+    $columns_after = $wpdb->get_col( "DESCRIBE {$pt}", 0 );
+    $needed        = [ 'page_url', 'page_title', 'referrer', 'viewed_at' ];
+    if ( ! array_diff( $needed, $columns_after ) ) {
+        update_option( 'vt_pageview_columns_ok', '1' );
     }
 }
 
