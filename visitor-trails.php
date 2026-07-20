@@ -3,7 +3,7 @@
  * Plugin Name: Visitor Trails
  * Plugin URI:  https://earthbreakdesigns.com
  * Description: Unified visitor tracking — page trails, click events, UTM params, tags, referrers, GeoIP, and a searchable dashboard.
- * Version:     2.6.4
+ * Version:     2.6.5
  * Author:      Earthbreak Designs
  * Author URI:  https://earthbreakdesigns.com
  * License:     GPL2
@@ -12,7 +12,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'VT_VERSION',         '2.6.4' );
+define( 'VT_VERSION',         '2.6.5' );
 define( 'VT_PLUGIN_DIR',      plugin_dir_path( __FILE__ ) );
 define( 'VT_PLUGIN_URL',      plugin_dir_url( __FILE__ ) );
 define( 'VT_SESSION_TIMEOUT', 30 * MINUTE_IN_SECONDS );
@@ -66,6 +66,7 @@ add_action( 'admin_init', 'vt_ensure_duration_column' );
 add_action( 'admin_init', 'vt_ensure_element_tag_column' );
 add_action( 'admin_init', 'vt_ensure_visitor_columns' );
 add_action( 'admin_init', 'vt_ensure_section_label_column' );
+add_action( 'admin_init', 'vt_ensure_column_widths' );
 
 // ── Daily purge ───────────────────────────────────────────────────────────────
 

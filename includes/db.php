@@ -103,6 +103,7 @@ function vt_create_tables() {
     vt_ensure_element_tag_column();
     vt_ensure_visitor_columns();
     vt_ensure_section_label_column();
+    vt_ensure_column_widths();
 }
 
 /**
@@ -319,6 +320,72 @@ function vt_ensure_section_label_column() {
     $columns_after = $wpdb->get_col( "DESCRIBE {$et}", 0 );
     if ( in_array( 'section_label', $columns_after, true ) ) {
         update_option( 'vt_section_label_column_ok', '1' );
+    }
+}
+
+/**
+ * Same self-healing family, but for column *width* rather than existence.
+ * Found on earthbreakdesigns.com: the sessions table's `country` column
+ * rejected an insert with "value too long or contains invalid data" —
+ * a legacy VARCHAR narrower than the current schema's VARCHAR(64), left
+ * behind by the same unreliable dbDelta ALTER-sync that caused the
+ * page_url gap (see vt_ensure_pageview_columns()). Verifies every VARCHAR
+ * column across all three tables against its canonical minimum width and
+ * widens (never narrows) anything that's fallen behind.
+ */
+function vt_ensure_column_widths() {
+    if ( get_option( 'vt_column_widths_ok' ) === '1' ) {
+        return;
+    }
+
+    global $wpdb;
+
+    $tables = [
+        $wpdb->prefix . VT_TABLE_SESSIONS => [
+            'session_key' => 64, 'visitor_key' => 64, 'ip_address' => 45, 'ip_anon' => 45,
+            'country' => 64, 'country_code' => 4, 'city' => 64,
+            'tag' => 128, 'utm_source' => 128, 'utm_medium' => 128, 'utm_campaign' => 128,
+            'utm_term' => 128, 'utm_content' => 128,
+            'referrer' => 512, 'entry_page' => 512, 'exit_page' => 512,
+            'browser' => 128, 'device_type' => 32, 'os' => 64, 'bot_reason' => 64,
+        ],
+        $wpdb->prefix . VT_TABLE_PAGEVIEWS => [
+            'page_url' => 512, 'page_title' => 256, 'referrer' => 512,
+        ],
+        $wpdb->prefix . VT_TABLE_EVENTS => [
+            'event_type' => 32, 'element_tag' => 16, 'element_text' => 255,
+            'element_id' => 128, 'element_classes' => 255, 'element_href' => 512,
+            'vp_label' => 128, 'section_label' => 128,
+        ],
+    ];
+
+    $all_ok = true;
+
+    foreach ( $tables as $table => $columns ) {
+        if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
+            $all_ok = false;
+            continue;
+        }
+
+        $by_name = [];
+        foreach ( $wpdb->get_results( "DESCRIBE {$table}" ) as $col ) {
+            $by_name[ $col->Field ] = $col->Type;
+        }
+
+        foreach ( $columns as $name => $min_length ) {
+            if ( ! isset( $by_name[ $name ] ) ) {
+                // Missing entirely — a different check's job to create it.
+                $all_ok = false;
+                continue;
+            }
+            if ( preg_match( '/varchar\((\d+)\)/i', $by_name[ $name ], $m ) && (int) $m[1] < $min_length ) {
+                $wpdb->query( "ALTER TABLE {$table} MODIFY COLUMN {$name} VARCHAR({$min_length}) NOT NULL DEFAULT ''" );
+            }
+        }
+    }
+
+    if ( $all_ok ) {
+        update_option( 'vt_column_widths_ok', '1' );
     }
 }
 
