@@ -280,7 +280,7 @@ function vt_dashboard_page() {
                         </td>
                         <td class="vt-mono">
                             <?php if ( $s->is_returning ) : ?>
-                                <span class="vt-badge vt-badge-returning" title="This visitor had a previous session before this one">↺</span>
+                                <span class="vt-badge vt-badge-returning" data-tip="This visitor had a previous session before this one">↺</span>
                             <?php endif; ?>
                             <?php echo esc_html( $display_ip ); ?><?php echo vt_bot_dot_html( $s->bot_tier, $s->bot_reason ); ?>
                         </td>
@@ -343,7 +343,7 @@ function vt_dashboard_page() {
                                     <li class="vt-trail-item">
                                         <div class="vt-trail-page">
                                             <span class="vt-trail-num"><?php echo $i + 1; ?></span>
-                                            <span class="vt-trail-path"><?php echo esc_html( $path ); ?></span>
+                                            <span class="vt-trail-path" title="<?php echo esc_attr( $path ); ?>"><?php echo esc_html( $path ); ?></span>
                                             <?php if ( $pv->page_title ) : ?>
                                                 <span class="vt-trail-title"><?php echo esc_html( $pv->page_title ); ?></span>
                                             <?php endif; ?>
@@ -372,8 +372,9 @@ function vt_dashboard_page() {
                                                     </span>
                                                 <?php endif; ?>
                                                 <?php if ( $ev->element_href ) : ?>
-                                                    <a class="vt-click-href" href="<?php echo esc_url( $ev->element_href ); ?>" target="_blank" rel="noopener noreferrer">
-                                                        <?php echo esc_html( str_replace( home_url(), '', $ev->element_href ) ); ?>
+                                                    <?php $href_path = str_replace( home_url(), '', $ev->element_href ); ?>
+                                                    <a class="vt-click-href" href="<?php echo esc_url( $ev->element_href ); ?>" title="<?php echo esc_attr( $href_path ); ?>" target="_blank" rel="noopener noreferrer">
+                                                        <?php echo esc_html( $href_path ); ?>
                                                     </a>
                                                 <?php endif; ?>
                                                 <span class="vt-click-time"><?php echo esc_html( date( 'g:i:s a', strtotime( $ev->fired_at ) ) ); ?></span>
@@ -464,7 +465,7 @@ function vt_settings_page() {
     }
     $anonymize     = get_option( 'vt_anonymize_ip', '0' );
     $hide_settings = vt_get_bot_hide_settings();
-    $skip_admins   = get_option( 'vt_skip_admins', '1' );
+    $skip_admins   = get_option( 'vt_skip_admins', '0' );
     $purge_days    = get_option( 'vt_purge_days',  90 );
     ?>
     <div class="wrap vt-wrap">

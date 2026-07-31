@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 add_action( 'wp_enqueue_scripts', 'vt_enqueue_pulse' );
 function vt_enqueue_pulse() {
     // Don't load if user is a logged-in admin (optional — comment out to track admins too)
-    if ( current_user_can( 'manage_options' ) && get_option( 'vt_skip_admins', '1' ) ) return;
+    if ( current_user_can( 'manage_options' ) && get_option( 'vt_skip_admins', '0' ) === '1' ) return;
 
     wp_enqueue_script(
         'vt-pulse',

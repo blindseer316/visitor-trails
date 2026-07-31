@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.7.0 */
+/* Visitor Trails — Admin Styles v2.7.1 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -159,10 +159,16 @@
 .vt-tag-editable { cursor: pointer; position: relative; }
 .vt-tag-editable[data-desc=""] { border-bottom: 1px dashed currentColor; }
 
-/* Custom tooltip — instant, no native title-attribute delay/styling.
-   Only renders when data-desc is non-empty. */
+/* Custom tooltip — instant, no native title-attribute delay/tiny-target
+   flakiness. Generic on [data-tip]; tag badges reuse it via data-desc
+   (only when non-empty) since that attribute also drives the inline editor. */
+[data-tip],
+.vt-tag-editable[data-desc]:not([data-desc=""]) {
+    position: relative;
+}
+[data-tip]::after,
 .vt-tag-editable[data-desc]:not([data-desc=""])::after {
-    content: attr(data-desc);
+    content: attr(data-tip) attr(data-desc);
     position: absolute;
     bottom: calc(100% + 7px);
     left: 50%;
@@ -183,6 +189,7 @@
     transition: opacity .1s ease, transform .1s ease;
     z-index: 50;
 }
+[data-tip]:hover::after,
 .vt-tag-editable[data-desc]:not([data-desc=""]):hover::after {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
@@ -282,7 +289,17 @@
     font-weight: 700;
     flex-shrink: 0;
 }
-.vt-trail-path  { font-family: monospace; font-size: 12px; font-weight: 600; }
+.vt-trail-path  {
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 600;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
+    min-width: 0;
+}
 .vt-trail-title { color: #6b7280; font-size: 12px; }
 .vt-trail-time  { color: #9ca3af; font-size: 11px; margin-left: auto; }
 .vt-trail-duration { color: #9ca3af; font-size: 11px; }
@@ -313,6 +330,12 @@
     font-size: 11px;
     font-family: monospace;
     text-decoration: none;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: bottom;
 }
 .vt-click-href:hover { text-decoration: underline; }
 .vt-click-tech {

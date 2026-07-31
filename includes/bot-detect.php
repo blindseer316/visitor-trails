@@ -146,7 +146,7 @@ function vt_bot_dot_html( $tier, $reason ) {
     ];
 
     return sprintf(
-        '<span class="vt-bot-dot vt-bot-tier-%d" title="%s">&#9679;</span>',
+        '<span class="vt-bot-dot vt-bot-tier-%d" data-tip="%s">&#9679;</span>',
         $tier,
         esc_attr( $labels[ $tier ] )
     );
