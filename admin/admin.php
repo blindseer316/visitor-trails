@@ -343,10 +343,14 @@ function vt_dashboard_page() {
                                     <li class="vt-trail-item">
                                         <div class="vt-trail-page">
                                             <span class="vt-trail-num"><?php echo $i + 1; ?></span>
-                                            <span class="vt-trail-path" title="<?php echo esc_attr( $path ); ?>"><?php echo esc_html( $path ); ?></span>
-                                            <?php if ( $pv->page_title ) : ?>
-                                                <span class="vt-trail-title"><?php echo esc_html( $pv->page_title ); ?></span>
-                                            <?php endif; ?>
+                                            <span class="vt-trail-page-card">
+                                                <?php if ( $i > 0 ) : ?><span class="vt-trail-arrow" title="Then went here">→</span><?php endif; ?>
+                                                <span class="vt-trail-page-icon">📄</span>
+                                                <span class="vt-trail-path" title="<?php echo esc_attr( $path ); ?>"><?php echo esc_html( $path ); ?></span>
+                                                <?php if ( $pv->page_title ) : ?>
+                                                    <span class="vt-trail-title"><?php echo esc_html( $pv->page_title ); ?></span>
+                                                <?php endif; ?>
+                                            </span>
                                             <span class="vt-trail-time"><?php echo esc_html( date( 'g:i:s a', strtotime( $pv->viewed_at ) ) ); ?></span>
                                             <?php $dur = vt_format_duration( $pv->duration_seconds ); ?>
                                             <?php if ( $dur ) : ?>
@@ -363,7 +367,7 @@ function vt_dashboard_page() {
                                                 <span class="vt-click-icon" title="<?php echo esc_attr( $tag_title ); ?>"><?php echo vt_click_icon( $ev->element_tag ); ?></span>
                                                 <span class="vt-click-label"><?php echo esc_html( $label ); ?></span>
                                                 <?php if ( ! empty( $ev->section_label ) ) : ?>
-                                                    <span class="vt-badge vt-badge-section" title="Section this click happened in"><?php echo esc_html( $ev->section_label ); ?></span>
+                                                    <span class="vt-section-tag" title="Section this click happened in">#<?php echo esc_html( $ev->section_label ); ?></span>
                                                 <?php endif; ?>
                                                 <?php if ( $ev->element_id || $ev->element_classes ) : ?>
                                                     <span class="vt-click-tech">

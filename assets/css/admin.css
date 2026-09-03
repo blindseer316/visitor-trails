@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.7.1 */
+/* Visitor Trails — Admin Styles v2.8.0 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -9,8 +9,6 @@
     --vt-tag-text:   #065f46;
     --vt-utm-bg:     #dbeafe;
     --vt-utm-text:   #1e40af;
-    --vt-section-bg:   #ede9fe;
-    --vt-section-text: #5b21b6;
     --vt-row-alt:    #f9fafb;
     --vt-trail-bg:   #f0f6fc;
     --vt-click-bg:   #fff7ed;
@@ -204,7 +202,6 @@
     height: auto;
 }
 .vt-badge-utm { background: var(--vt-utm-bg); color: var(--vt-utm-text); }
-.vt-badge-section { background: var(--vt-section-bg); color: var(--vt-section-text); margin-left: 4px; }
 .vt-badge-returning {
     background: #ede9fe;
     color: #6d28d9;
@@ -289,6 +286,20 @@
     font-weight: 700;
     flex-shrink: 0;
 }
+/* Page card — the primary visual anchor of each trail step, deliberately
+   given the visual weight the section tag used to wrongly carry */
+.vt-trail-page-card {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #eef2ff;
+    border-radius: 6px;
+    padding: 4px 10px;
+    min-width: 0;
+    flex-shrink: 1;
+}
+.vt-trail-arrow { color: var(--vt-brand); font-weight: 700; flex-shrink: 0; }
+.vt-trail-page-icon { flex-shrink: 0; font-size: 11px; }
 .vt-trail-path  {
     font-family: monospace;
     font-size: 12px;
@@ -338,6 +349,15 @@
     vertical-align: bottom;
 }
 .vt-click-href:hover { text-decoration: underline; }
+.vt-section-tag {
+    color: #9ca3af;
+    font-size: 10px;
+    font-family: monospace;
+    background: #f3f4f6;
+    border-radius: 3px;
+    padding: 1px 5px;
+    cursor: help;
+}
 .vt-click-tech {
     display: none;
     color: #9ca3af;

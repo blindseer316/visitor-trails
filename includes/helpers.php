@@ -132,10 +132,10 @@ function vt_format_duration( $seconds ) {
  */
 function vt_click_icon( $tag ) {
     switch ( $tag ) {
-        case 'a':      return '🔗';
+        case 'a':      return '↳';
         case 'button':
         case 'input':  return '🔘';
-        default:       return '↳';
+        default:       return '•'; // legacy rows recorded before element_tag existed
     }
 }
 

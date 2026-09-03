@@ -86,9 +86,15 @@
   // a section with hundreds of children is just as cheap as one with a few.
 
   function getSectionLabel(el) {
-    var container = el.closest('section')
-      || el.closest('[role="region"], [role="main"]')
-      || el.closest('[id]');
+    // Start from the parent, not el itself — closest() matches the element
+    // it's called on first, so a clicked link that has its own id would
+    // otherwise report itself as its own "section."
+    var start = el.parentElement;
+    if (!start) return '';
+
+    var container = start.closest('section')
+      || start.closest('[role="region"], [role="main"]')
+      || start.closest('[id]');
 
     if (!container) return '';
     if (container.id) return container.id;
