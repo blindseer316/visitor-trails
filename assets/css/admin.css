@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.9.1 */
+/* Visitor Trails — Admin Styles v2.9.2 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -286,15 +286,12 @@
     font-weight: 700;
     flex-shrink: 0;
 }
-/* Page card — the primary visual anchor of each trail step, deliberately
-   given the visual weight the section tag used to wrongly carry */
+/* Page card row — just a flex layout now, no enclosing background, so
+   the page title/URL sit flush left instead of inset in a colored box */
 .vt-trail-page-card {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: #eef2ff;
-    border-radius: 6px;
-    padding: 4px 10px;
     min-width: 0;
     flex-shrink: 1;
 }
@@ -343,9 +340,9 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 12px;
+    font-size: 11px;
     color: #374151;
-    background: var(--vt-click-bg);
+    background: rgba(255,254,243,0.48);
     border-radius: 4px;
     padding: 3px 8px;
 }
