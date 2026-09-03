@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.9.0 */
+/* Visitor Trails — Admin Styles v2.9.1 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -298,15 +298,18 @@
     min-width: 0;
     flex-shrink: 1;
 }
-.vt-trail-page-icon { flex-shrink: 0; color: #4f46e5; display: inline-flex; }
-.vt-page-icon-svg { width: 12px; height: 12px; display: block; }
+.vt-trail-page-icon { display: inline-flex; vertical-align: middle; margin-right: 3px; }
+.vt-page-icon-svg { width: 11px; height: 11px; display: block; }
 .vt-badge-page-title {
     background: #ede9fe;
     color: #6d28d9;
+    font-size: 12px;
     max-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     display: inline-block;
+    vertical-align: middle;
     flex-shrink: 1;
     min-width: 0;
 }
@@ -347,7 +350,7 @@
     padding: 3px 8px;
 }
 .vt-click-icon  { color: var(--vt-brand); font-weight: 700; cursor: help; }
-.vt-click-label { font-weight: 500; }
+.vt-click-label { font-weight: 500; cursor: help; }
 .vt-click-arrow { color: var(--vt-brand); font-weight: 700; flex-shrink: 0; }
 .vt-click-href  {
     color: var(--vt-brand);

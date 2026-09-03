@@ -325,7 +325,9 @@ function vt_dashboard_page() {
                         <td><?php echo $s->utm_source ? '<span class="vt-badge vt-badge-utm">' . esc_html( $s->utm_source ) . '</span>' : '—'; ?></td>
                         <td><?php echo $s->utm_campaign ? esc_html( $s->utm_campaign ) : '—'; ?></td>
                         <td title="<?php echo esc_attr( $s->referrer ); ?>"><?php echo $ref_domain ? esc_html( $ref_domain ) : '—'; ?></td>
-                        <td class="vt-entry-page" title="<?php echo esc_attr( $s->entry_page ); ?>"><?php echo esc_html( $entry_path ); ?></td>
+                        <td class="vt-entry-page">
+                            <a href="<?php echo esc_url( $s->entry_page ); ?>" title="<?php echo esc_attr( $s->entry_page ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $entry_path ); ?></a>
+                        </td>
                         <td class="vt-center"><?php echo $pv_count; ?></td>
                         <td class="vt-center"><?php echo $ev_count ? '<span class="vt-click-count">' . $ev_count . '</span>' : '—'; ?></td>
                         <td><?php echo esc_html( $s->device_type ?: '—' ); ?></td>
@@ -365,9 +367,11 @@ function vt_dashboard_page() {
                                         <div class="vt-trail-page">
                                             <span class="vt-trail-num"><?php echo $i + 1; ?></span>
                                             <span class="vt-trail-page-card">
-                                                <span class="vt-trail-page-icon"><?php echo vt_page_icon_svg(); ?></span>
                                                 <?php if ( $pv->page_title ) : ?>
-                                                    <span class="vt-badge vt-badge-page-title" title="<?php echo esc_attr( $pv->page_title ); ?>"><?php echo esc_html( $pv->page_title ); ?></span>
+                                                    <span class="vt-badge vt-badge-page-title" title="<?php echo esc_attr( $pv->page_title ); ?>">
+                                                        <span class="vt-trail-page-icon"><?php echo vt_page_icon_svg(); ?></span>
+                                                        <?php echo esc_html( $pv->page_title ); ?>
+                                                    </span>
                                                 <?php endif; ?>
                                                 <a class="vt-trail-path" href="<?php echo esc_url( $pv->page_url ); ?>" title="<?php echo esc_attr( $path ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $path ); ?></a>
                                             </span>
@@ -385,7 +389,7 @@ function vt_dashboard_page() {
                                             ?>
                                             <li class="vt-click-item">
                                                 <span class="vt-click-icon" title="<?php echo esc_attr( $tag_title ); ?>"><?php echo vt_click_icon( $ev->element_tag ); ?></span>
-                                                <span class="vt-click-label"><?php echo esc_html( $label ); ?></span>
+                                                <span class="vt-click-label" data-tip="Text of the clicked link/button"><?php echo esc_html( $label ); ?></span>
                                                 <?php if ( ! empty( $ev->section_label ) ) : ?>
                                                     <span class="vt-section-tag" title="Section this click happened in">#<?php echo esc_html( $ev->section_label ); ?></span>
                                                 <?php endif; ?>
