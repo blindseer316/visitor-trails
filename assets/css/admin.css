@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.8.1 */
+/* Visitor Trails — Admin Styles v2.9.0 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -298,15 +298,15 @@
     min-width: 0;
     flex-shrink: 1;
 }
-.vt-trail-page-icon { flex-shrink: 0; font-size: 11px; }
-.vt-trail-title {
-    font-size: 12px;
-    font-weight: 600;
-    color: #1f2937;
+.vt-trail-page-icon { flex-shrink: 0; color: #4f46e5; display: inline-flex; }
+.vt-page-icon-svg { width: 12px; height: 12px; display: block; }
+.vt-badge-page-title {
+    background: #ede9fe;
+    color: #6d28d9;
     max-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    display: inline-block;
     flex-shrink: 1;
     min-width: 0;
 }
@@ -366,22 +366,22 @@
 }
 .vt-click-href:hover { text-decoration: underline; }
 .vt-section-tag {
-    color: #9ca3af;
-    font-size: 10px;
+    color: #6b7280;
+    font-size: 11px;
     font-family: monospace;
     background: #f3f4f6;
     border-radius: 3px;
-    padding: 1px 5px;
+    padding: 2px 6px;
     cursor: help;
 }
 .vt-click-tech {
     display: none;
-    color: #9ca3af;
-    font-size: 10px;
+    color: #6b7280;
+    font-size: 11px;
     font-family: monospace;
     background: #f3f4f6;
     border-radius: 3px;
-    padding: 1px 5px;
+    padding: 2px 6px;
 }
 .vt-wrap.vt-show-tech .vt-click-tech { display: inline-block; }
 .vt-click-time  { color: #9ca3af; font-size: 11px; margin-left: auto; flex-shrink: 0; }

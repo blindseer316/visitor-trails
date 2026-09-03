@@ -49,6 +49,33 @@ function vt_get_bot_hide_settings() {
     ];
 }
 
+/**
+ * CSV export has to happen before WordPress prints any of the admin page
+ * chrome (header, menu, notices) — header()/Content-Disposition calls in
+ * vt_export_csv() are no-ops once output has already started, which is
+ * why running this from inside vt_dashboard_page() just dumped the CSV
+ * text into the middle of the rendered HTML instead of downloading it.
+ * admin_init fires early enough for headers to still work.
+ */
+add_action( 'admin_init', 'vt_maybe_export_csv' );
+function vt_maybe_export_csv() {
+    if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'visitor-trails' ) return;
+    if ( ! isset( $_GET['vt_export'] ) || ! current_user_can( 'manage_options' ) ) return;
+
+    global $wpdb;
+    $st = $wpdb->prefix . VT_TABLE_SESSIONS;
+
+    $search     = isset( $_GET['vt_search'] )   ? sanitize_text_field( wp_unslash( $_GET['vt_search'] ) )  : '';
+    $filter_tag = isset( $_GET['vt_tag'] )      ? sanitize_text_field( wp_unslash( $_GET['vt_tag'] ) )     : '';
+    $filter_src = isset( $_GET['vt_utm_src'] )  ? sanitize_text_field( wp_unslash( $_GET['vt_utm_src'] ) ) : '';
+    $filter_cc  = isset( $_GET['vt_country'] )  ? sanitize_text_field( wp_unslash( $_GET['vt_country'] ) ) : '';
+    $date_from  = isset( $_GET['vt_from'] )     ? sanitize_text_field( wp_unslash( $_GET['vt_from'] ) )    : '';
+    $date_to    = isset( $_GET['vt_to'] )       ? sanitize_text_field( wp_unslash( $_GET['vt_to'] ) )      : '';
+
+    vt_export_csv( $st, $search, $filter_tag, $filter_src, $filter_cc, $date_from, $date_to );
+    exit;
+}
+
 function vt_dashboard_page() {
     global $wpdb;
     $st = $wpdb->prefix . VT_TABLE_SESSIONS;
@@ -71,12 +98,6 @@ function vt_dashboard_page() {
     $hide_settings  = vt_get_bot_hide_settings();
     $show_bots      = isset( $_GET['vt_show_bots'] ) && $_GET['vt_show_bots'] === '1';
     $hidden_tiers   = $show_bots ? [] : array_keys( array_filter( $hide_settings ) );
-
-    // CSV export (always includes bots — they're tagged in the CSV instead)
-    if ( isset( $_GET['vt_export'] ) && current_user_can( 'manage_options' ) ) {
-        vt_export_csv( $st, $search, $filter_tag, $filter_src, $filter_cc, $date_from, $date_to );
-        exit;
-    }
 
     // Legacy bot rescan — backfills sessions recorded before is_bot_ip existed
     $rescan_notice = '';
@@ -231,10 +252,10 @@ function vt_dashboard_page() {
                 <a href="<?php echo esc_url( add_query_arg( 'vt_show_bots', $show_bots ? '0' : '1' ) ); ?>" class="button button-secondary">
                     <?php echo $show_bots ? '↩ Back to filtered view' : '🔍 Show all bots (debug)'; ?>
                 </a>
-                <a href="<?php echo esc_url( add_query_arg( 'vt_export', '1' ) ); ?>" class="button button-secondary">⬇ Export CSV</a>
-                <button type="button" id="vt-toggle-tech" class="button button-secondary" title="Show element id/classes on click events, for debugging">
-                    🔧 Show technical details
+                <button type="button" id="vt-toggle-tech" class="button button-secondary" title="Shows each click event's raw element id and class attributes, for debugging">
+                    🔧 Show IDs/Classes
                 </button>
+                <a href="<?php echo esc_url( add_query_arg( 'vt_export', '1' ) ); ?>" class="button button-secondary">⬇ Export CSV</a>
             </div>
         </div>
 
@@ -344,9 +365,9 @@ function vt_dashboard_page() {
                                         <div class="vt-trail-page">
                                             <span class="vt-trail-num"><?php echo $i + 1; ?></span>
                                             <span class="vt-trail-page-card">
-                                                <span class="vt-trail-page-icon">🌐</span>
+                                                <span class="vt-trail-page-icon"><?php echo vt_page_icon_svg(); ?></span>
                                                 <?php if ( $pv->page_title ) : ?>
-                                                    <span class="vt-trail-title" title="<?php echo esc_attr( $pv->page_title ); ?>"><?php echo esc_html( $pv->page_title ); ?></span>
+                                                    <span class="vt-badge vt-badge-page-title" title="<?php echo esc_attr( $pv->page_title ); ?>"><?php echo esc_html( $pv->page_title ); ?></span>
                                                 <?php endif; ?>
                                                 <a class="vt-trail-path" href="<?php echo esc_url( $pv->page_url ); ?>" title="<?php echo esc_attr( $path ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $path ); ?></a>
                                             </span>

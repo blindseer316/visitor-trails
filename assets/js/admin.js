@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin JS v2.7.0 */
+/* Visitor Trails — Admin JS v2.9.0 */
 jQuery(function ($) {
 
     // ── Trail expand / collapse ───────────────────────────────────────────────
@@ -47,7 +47,7 @@ jQuery(function ($) {
 
     function setTechState(show) {
         $('.vt-wrap').toggleClass('vt-show-tech', show);
-        $('#vt-toggle-tech').text(show ? '🔧 Hide technical details' : '🔧 Show technical details');
+        $('#vt-toggle-tech').text(show ? '🔧 Hide IDs/Classes' : '🔧 Show IDs/Classes');
         try { localStorage.setItem(TECH_KEY, show ? '1' : '0'); } catch (e) {}
     }
 
