@@ -344,12 +344,11 @@ function vt_dashboard_page() {
                                         <div class="vt-trail-page">
                                             <span class="vt-trail-num"><?php echo $i + 1; ?></span>
                                             <span class="vt-trail-page-card">
-                                                <?php if ( $i > 0 ) : ?><span class="vt-trail-arrow" title="Then went here">→</span><?php endif; ?>
-                                                <span class="vt-trail-page-icon">📄</span>
-                                                <span class="vt-trail-path" title="<?php echo esc_attr( $path ); ?>"><?php echo esc_html( $path ); ?></span>
+                                                <span class="vt-trail-page-icon">🌐</span>
                                                 <?php if ( $pv->page_title ) : ?>
-                                                    <span class="vt-trail-title"><?php echo esc_html( $pv->page_title ); ?></span>
+                                                    <span class="vt-trail-title" title="<?php echo esc_attr( $pv->page_title ); ?>"><?php echo esc_html( $pv->page_title ); ?></span>
                                                 <?php endif; ?>
+                                                <a class="vt-trail-path" href="<?php echo esc_url( $pv->page_url ); ?>" title="<?php echo esc_attr( $path ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $path ); ?></a>
                                             </span>
                                             <span class="vt-trail-time"><?php echo esc_html( date( 'g:i:s a', strtotime( $pv->viewed_at ) ) ); ?></span>
                                             <?php $dur = vt_format_duration( $pv->duration_seconds ); ?>
@@ -377,6 +376,7 @@ function vt_dashboard_page() {
                                                 <?php endif; ?>
                                                 <?php if ( $ev->element_href ) : ?>
                                                     <?php $href_path = str_replace( home_url(), '', $ev->element_href ); ?>
+                                                    <span class="vt-click-arrow" title="Led to this page">→</span>
                                                     <a class="vt-click-href" href="<?php echo esc_url( $ev->element_href ); ?>" title="<?php echo esc_attr( $href_path ); ?>" target="_blank" rel="noopener noreferrer">
                                                         <?php echo esc_html( $href_path ); ?>
                                                     </a>

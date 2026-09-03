@@ -1,4 +1,4 @@
-/* Visitor Trails — Admin Styles v2.8.0 */
+/* Visitor Trails — Admin Styles v2.8.1 */
 
 :root {
     --vt-brand:      #2271b1;
@@ -298,20 +298,32 @@
     min-width: 0;
     flex-shrink: 1;
 }
-.vt-trail-arrow { color: var(--vt-brand); font-weight: 700; flex-shrink: 0; }
 .vt-trail-page-icon { flex-shrink: 0; font-size: 11px; }
-.vt-trail-path  {
-    font-family: monospace;
+.vt-trail-title {
     font-size: 12px;
     font-weight: 600;
-    max-width: 320px;
+    color: #1f2937;
+    max-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     flex-shrink: 1;
     min-width: 0;
 }
-.vt-trail-title { color: #6b7280; font-size: 12px; }
+.vt-trail-path  {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--vt-brand);
+    text-decoration: none;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
+    min-width: 0;
+    display: inline-block;
+}
+.vt-trail-path:hover { text-decoration: underline; }
 .vt-trail-time  { color: #9ca3af; font-size: 11px; margin-left: auto; }
 .vt-trail-duration { color: #9ca3af; font-size: 11px; }
 
@@ -336,11 +348,15 @@
 }
 .vt-click-icon  { color: var(--vt-brand); font-weight: 700; cursor: help; }
 .vt-click-label { font-weight: 500; }
+.vt-click-arrow { color: var(--vt-brand); font-weight: 700; flex-shrink: 0; }
 .vt-click-href  {
     color: var(--vt-brand);
     font-size: 11px;
     font-family: monospace;
     text-decoration: none;
+    background: #eef2ff;
+    border-radius: 4px;
+    padding: 1px 7px;
     max-width: 260px;
     overflow: hidden;
     text-overflow: ellipsis;
